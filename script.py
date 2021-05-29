@@ -1,7 +1,7 @@
 import http.client
 import json
 import hashlib
-from variables import mobile, beneficiary_id
+from variables import mobile, beneficiary_id, filename
 
 def requestOTP(mobile):
     mobile = str(mobile)
@@ -57,7 +57,7 @@ def getCertificate(token, beneficiary_id):
     res = conn.getresponse()
     data = res.read()
     # print(data.decode("utf-8"))
-    return data.decode("utf-8")
+    return data
 
 
 
@@ -67,16 +67,6 @@ def getCertificate(token, beneficiary_id):
 txn_id = requestOTP(mobile)
 txn_id = json.loads(txn_id)
 txn_id = txn_id["txnId"]
-
-
-# try:
-#     txn_id = json.loads(txn_id)
-#     txn_id = txn_id["txnId"]
-#     print('try - txn_ID',txn_id, '\n\n')
-# except Exception as e:
-#     print(e)
-#     txn_id = txn_id["txnId"]
-#     print('except - txn_ID', txn_id, '\n\n')
 
 
 
@@ -90,4 +80,8 @@ print('token:',token, '\n\n')
 
 
 
-print(getCertificate(token, beneficiary_id))
+fileresponse = getCertificate(token, beneficiary_id)
+
+file = open(filename + ".pdf", 'wb')
+file.write(fileresponse)
+file.close()
